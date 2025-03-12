@@ -23,9 +23,11 @@ services:
       - db
 
   frontend:
-    image: evgenyfil/foodgram_frontend
+    container_name: foodgram-front
+    build: ../frontend
     volumes:
       - ../frontend/:/app/result_build/
+      
   nginx:
     container_name: foodgram-proxy
     image: nginx:1.25.4-alpine
@@ -37,3 +39,5 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static:/static
       - media:/media
+    depends_on:
+      - backend
