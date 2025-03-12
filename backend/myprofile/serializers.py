@@ -2,9 +2,10 @@ import base64
 import re
 
 from django.core.files.base import ContentFile
+from rest_framework import serializers
+
 from myprofile.models import MyProfile, Subscription
 from recipes.models import Recipes
-from rest_framework import serializers
 
 
 class Base64ImageField(serializers.ImageField):
