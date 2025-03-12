@@ -29,9 +29,8 @@ services:
     depends_on:
       - db
       
-  gateway:
-    image: evgenyfil/foodgram_gateway
-    env_file: .env
+  nginx:
+    image: nginx:1.19.3
     ports:
       - "8000:80"
     volumes:
