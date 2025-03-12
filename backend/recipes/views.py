@@ -159,7 +159,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_object(self, pk):
-        """Получить рецепт по первичному ключу."""
         try:
             return Recipes.objects.get(pk=pk)
         except Recipes.DoesNotExist:
