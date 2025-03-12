@@ -30,8 +30,8 @@ services:
       - db
       
   nginx:
-    container_name: foodgram-proxy
-    image: nginx:1.25.4-alpine
+    image: evgenyfil/foodgram_gateway
+    env_file: .env
     ports:
       - "8000:80"
     volumes:
