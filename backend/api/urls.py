@@ -1,16 +1,11 @@
+from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from django.urls import path, include, re_path
-from myprofile.views import (
-    UserListCreateView,
-    UserDetailView,
-    UserMeView,
-    UserAvatarView,
-    ChangePasswordView,
-    SubscriptionListView,
-    SubscriptionViewSet
-)
-from recipes.views import TagsViewSet, IngredientsViewSet, RecipesViewSet, redirect_short_link
+from myprofile.views import (ChangePasswordView, SubscriptionListView,
+                             SubscriptionViewSet, UserAvatarView,
+                             UserDetailView, UserListCreateView, UserMeView)
+from recipes.views import (IngredientsViewSet, RecipesViewSet, TagsViewSet,
+                           redirect_short_link)
 
 router = DefaultRouter()
 router.register(r'tags', TagsViewSet)
@@ -37,7 +32,11 @@ urlpatterns = [
              {'post': 'create', 'delete': 'destroy'}
          ),
          name='subscribe'),
-    path('s/<str:short_link>/', redirect_short_link, name='redirect_short_link'),
+    path(
+        's/<str:short_link>/',
+        redirect_short_link,
+        name='redirect_short_link'
+    ),
     path('', include(router.urls)),
     path('auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),

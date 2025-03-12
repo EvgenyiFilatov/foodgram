@@ -1,15 +1,12 @@
-from rest_framework import generics, permissions, viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from myprofile.models import MyProfile, Subscription
-from myprofile.serializers import (
-    UserSerializer,
-    UserCreateSerializer,
-    ChangePasswordSerializer,
-    SubscriptionSerializer,
-)
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.response import Response
+
 from api.paginators import CustomPageLimitPagination
+from myprofile.models import MyProfile, Subscription
+from myprofile.serializers import (ChangePasswordSerializer,
+                                   SubscriptionSerializer,
+                                   UserCreateSerializer, UserSerializer)
 
 
 class UserListCreateView(generics.ListCreateAPIView):
@@ -127,9 +124,10 @@ class SubscriptionViewSet(viewsets.ViewSet):
         )
 
     def destroy(self, request, id=None):
-        subscribe_to = get_object_or_404(MyProfile, pk=id)
         subscription = Subscription.objects.filter(
-            subscriber=request.user, subscribe_to_id=id).first()
+            subscriber=request.user,
+            subscribe_to_id=get_object_or_404(MyProfile, pk=id)
+        ).first()
 
         if not subscription:
             return Response(

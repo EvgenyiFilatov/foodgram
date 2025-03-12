@@ -1,8 +1,7 @@
 from django_filters import rest_framework as filters
 
-from recipes.models import Ingredients
 from myprofile.models import MyProfile
-from recipes.models import Tags, Recipes
+from recipes.models import Ingredients, Recipes, Tags
 
 
 class IngredientsFilter(filters.FilterSet):
@@ -25,7 +24,9 @@ class RecipesFilter(filters.FilterSet):
         lookup_expr='exact'
     )
     is_favorited = filters.BooleanFilter(method='filter_is_favorited',)
-    is_in_shopping_cart = filters.BooleanFilter(method='filter_is_in_shopping_list',)
+    is_in_shopping_cart = filters.BooleanFilter(
+        method='filter_is_in_shopping_list',
+    )
 
     class Meta:
         model = Recipes
@@ -33,18 +34,18 @@ class RecipesFilter(filters.FilterSet):
 
     def filter_is_favorited(self, queryset, name, value):
         if value is None:
-            return queryset  # Не фильтруем, если значение не указано
+            return queryset
 
         if self.request.user.is_authenticated:
             if value:
                 return queryset.filter(favorited_by=self.request.user)
             return queryset.exclude(favorited_by=self.request.user)
-        
+
         return queryset
-    
+
     def filter_is_in_shopping_list(self, queryset, name, value):
         if value is None:
-            return queryset  # Не фильтруем, если значение не указано
+            return queryset
 
         if self.request.user.is_authenticated:
             if value:
@@ -52,5 +53,3 @@ class RecipesFilter(filters.FilterSet):
             return queryset.exclude(in_shopping_cart=self.request.user)
 
         return queryset
-
-        

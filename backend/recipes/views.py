@@ -1,27 +1,25 @@
-from django.http import HttpResponse
 import csv
-from io import BytesIO, TextIOWrapper
-from rest_framework import status, viewsets, permissions
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.filters import SearchFilter
-from recipes.filters import IngredientsFilter, RecipesFilter
-from django_filters import rest_framework as filters
-from recipes.models import Tags, Ingredients, Recipes
-from recipes.permissions import IsAuthor
-from recipes.serializers import (
-    TagsSerializer,
-    IngredientsSerializer,
-    RecipesSerializer,
-    RecipesCreateUpdateSerializer,
-    RecipesForFavoriteAndShoppingSerializer
-)
 import hashlib
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, redirect
-from api.paginators import CustomPageLimitPagination
 from collections import defaultdict
+from io import BytesIO, TextIOWrapper
+
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django_filters import rest_framework as filters
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from rest_framework.response import Response
+
+from api.paginators import CustomPageLimitPagination
+from recipes.filters import IngredientsFilter, RecipesFilter
+from recipes.models import Ingredients, Recipes, Tags
+from recipes.permissions import IsAuthor
+from recipes.serializers import (IngredientsSerializer,
+                                 RecipesCreateUpdateSerializer,
+                                 RecipesForFavoriteAndShoppingSerializer,
+                                 RecipesSerializer, TagsSerializer)
 
 
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -193,7 +191,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
             for recipe_ingredient in recipe.ingredient.all():
                 ingredient = recipe_ingredient.ingredient
                 ingredients[ingredient]['amount'] += recipe_ingredient.amount
-                ingredients[ingredient]['measurement_unit'] = ingredient.measurement_unit
+                ingredients[ingredient]['measurement_unit'] = (
+                    ingredient.measurement_unit
+                )
 
         print(ingredients)
 
@@ -213,7 +213,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
         output.seek(0)
 
         response = HttpResponse(output.getvalue(), content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="shopping_cart.csv"'
+        response['Content-Disposition'] = (
+            'attachment; filename="shopping_cart.csv"'
+        )
         return response
 
 
