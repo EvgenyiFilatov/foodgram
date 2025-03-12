@@ -1,12 +1,11 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status, viewsets
-from rest_framework.response import Response
-
 from api.paginators import CustomPageLimitPagination
+from django.shortcuts import get_object_or_404
 from myprofile.models import MyProfile, Subscription
 from myprofile.serializers import (ChangePasswordSerializer,
                                    SubscriptionSerializer,
                                    UserCreateSerializer, UserSerializer)
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.response import Response
 
 
 class UserListCreateView(generics.ListCreateAPIView):
