@@ -20,6 +20,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 
+
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     """Класс для работы с тегами рецептов."""
 
