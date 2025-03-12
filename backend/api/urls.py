@@ -1,11 +1,10 @@
 from django.urls import include, path, re_path
-from rest_framework.routers import DefaultRouter
-
 from myprofile.views import (ChangePasswordView, SubscriptionListView,
                              SubscriptionViewSet, UserAvatarView,
                              UserDetailView, UserListCreateView, UserMeView)
 from recipes.views import (IngredientsViewSet, RecipesViewSet, TagsViewSet,
                            redirect_short_link)
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'tags', TagsViewSet)

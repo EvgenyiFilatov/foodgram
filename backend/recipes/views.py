@@ -3,6 +3,7 @@ import hashlib
 from collections import defaultdict
 from io import BytesIO, TextIOWrapper
 
+from api.paginators import CustomPageLimitPagination
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -12,7 +13,6 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 
-from api.paginators import CustomPageLimitPagination
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
 from recipes.permissions import IsAuthor
