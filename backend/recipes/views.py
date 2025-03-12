@@ -8,11 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django_filters import rest_framework as filters
-from rest_framework import permissions, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
-from rest_framework.response import Response
-
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
 from recipes.permissions import IsAuthor
@@ -20,7 +15,10 @@ from recipes.serializers import (IngredientsSerializer,
                                  RecipesCreateUpdateSerializer,
                                  RecipesForFavoriteAndShoppingSerializer,
                                  RecipesSerializer, TagsSerializer)
-
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from rest_framework.response import Response
 
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     """Класс для работы с тегами рецептов."""
