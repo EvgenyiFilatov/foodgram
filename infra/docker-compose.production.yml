@@ -29,7 +29,7 @@ services:
     depends_on:
       - db
       
-  nginx:
+  gateway:
     image: evgenyfil/foodgram_gateway
     env_file: .env
     ports:
