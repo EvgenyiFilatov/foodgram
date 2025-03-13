@@ -15,7 +15,6 @@ services:
 
   backend:
     image: evgenyfil/foodgram_backend:latest
-    restart: always
     env_file: .env
     volumes:
       - static:/backend_static
