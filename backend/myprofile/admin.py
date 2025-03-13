@@ -10,3 +10,4 @@ class MyUserAdmin(admin.ModelAdmin):
 @admin.register(Subscription)
 class Subscription(admin.ModelAdmin):
     list_display = ('subscriber', 'subscribe_to')
+    search_fields = ('username', 'email',)

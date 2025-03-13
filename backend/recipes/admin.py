@@ -10,6 +10,7 @@ class Tags(admin.ModelAdmin):
 @admin.register(Ingredients)
 class Ingredients(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit')
+    search_fields = ('name',)
 
 
 class RecipeIngredientsInline(admin.TabularInline):
@@ -28,5 +29,5 @@ class Recipes(admin.ModelAdmin):
         'is_in_shopping_cart'
     )
     exclude = ('ingredients',)
-    search_fields = ('name',)
-    list_filter = ('tags', 'author', 'is_favorited', 'is_in_shopping_cart')
+    search_fields = ('name', 'author',)
+    list_filter = ('tags',)
