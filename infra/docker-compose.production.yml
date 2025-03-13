@@ -23,10 +23,8 @@ services:
   frontend:
     image: evgenyfil/foodgram_frontend:latest
     env_file: .env
-    command: cp -r /app/build/. /static/
     volumes:
       - ../frontend/:/app/result_build/
-      - static:/static
       
   nginx:
     image: nginx:latest
