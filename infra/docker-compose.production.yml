@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 volumes:
   pg_data:
@@ -15,19 +15,18 @@ services:
 
   backend:
     image: evgenyfil/foodgram_backend:latest
+    restart: always
     env_file: .env
     volumes:
       - static:/backend_static
       - media:/media
-    depends_on:
-      - db
 
   frontend:
     image: evgenyfil/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
-      - db
+      - backend
       
   nginx:
     image: nginx:latest
@@ -39,5 +38,3 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static:/static
       - media:/media
-    depends_on:
-      - backend
