@@ -23,8 +23,8 @@ services:
       - db
 
   frontend:
-    container_name: foodgram-front
-    build: ../frontend
+    image: evgenyfil/foodgram_frontend
+    env_file: .env
     volumes:
       - ../frontend/:/app/result_build/
   nginx:
