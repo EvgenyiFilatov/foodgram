@@ -16,9 +16,9 @@ services:
   frontend:
     container_name: foodgram-frontend
     image: evgenyfil/foodgram_frontend:latest
-    command: cp -r /app/build/. /frontend_static/
+    command: cp -r /app/build/. /static/
     volumes:
-      - static:/frontend_static
+      - static:/static
 
   backend:
     container_name: foodgram-backend
@@ -39,7 +39,7 @@ services:
     ports:
       - 8000:80
     volumes:
-      - static:/staticfiles
+      - static:/static
       - media:/media
     depends_on:
       - backend
