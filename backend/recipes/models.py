@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from myprofile.models import MyProfile
 
 
@@ -76,7 +77,8 @@ class Recipes(models.Model):
     is_in_shopping_cart = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Дата публикации'
+        verbose_name='Дата публикации',
+        default=timezone.now
     )
     short_link = models.CharField(max_length=10, unique=True, blank=True)
 
