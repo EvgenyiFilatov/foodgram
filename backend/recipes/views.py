@@ -5,8 +5,7 @@ from io import BytesIO, TextIOWrapper
 
 from api.paginators import CustomPageLimitPagination
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
