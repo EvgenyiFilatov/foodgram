@@ -85,9 +85,11 @@ class RecipesViewSet(viewsets.ModelViewSet):
     def get_short_link(self, request, pk=None):
         """Получить короткую ссылку на рецепт."""
         recipe = get_object_or_404(Recipes, id=pk)
-        recipe_hash = hashlib.md5(f"{recipe.id}".encode()).hexdigest()[:3]
-
-        short_link = request.build_absolute_uri(f"/s/{recipe_hash}")
+        if not recipe.short_link:
+            recipe_hash = hashlib.md5(f"{recipe.id}".encode()).hexdigest()[:6]
+            recipe.short_link = recipe_hash
+            recipe.save()
+        short_link = request.build_absolute_uri(f"/s/{recipe.short_link}")
         return Response({"short-link": short_link})
 
     @action(
@@ -219,8 +221,5 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
-    recipes = Recipes.objects.all()
-    for recipe in recipes:
-        if hashlib.md5(f"{recipe.id}".encode()).hexdigest()[:3] == short_link:
-            return redirect(f'/recipes/{recipe.id}/')
-    return HttpResponseRedirect(reverse('not_found_page'))
+    recipe = get_object_or_404(Recipes, short_link=short_link)
+    return HttpResponseRedirect(f'/recipes/{recipe.id}/')

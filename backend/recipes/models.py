@@ -78,6 +78,7 @@ class Recipes(models.Model):
         auto_now_add=True,
         verbose_name='Дата публикации'
     )
+    short_link = models.CharField(max_length=10, unique=True, blank=True)
 
     class Meta:
         verbose_name = 'Рецепт'
