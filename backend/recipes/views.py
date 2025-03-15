@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django_filters import rest_framework as filters
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
-from recipes.permissions import IsAuthorOrAdmin
+from recipes.permissions import IsAuthor
 from recipes.serializers import (IngredientsSerializer,
                                  RecipesCreateUpdateSerializer,
                                  RecipesForFavoriteAndShoppingSerializer,
@@ -53,7 +53,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'POST':
             return [permissions.IsAuthenticated()]
         elif self.request.method in ['PATCH', 'DELETE']:
-            return [IsAuthorOrAdmin()]
+            if self.request.user.is_staff:
+                return [permissions.IsAuthenticated()]
+            return [IsAuthor()]
         return super().get_permissions()
 
     def create(self, request, *args, **kwargs):
