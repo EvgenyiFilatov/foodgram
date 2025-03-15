@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
-from recipes.permissions import IsAuthor
+from recipes.permissions import IsAuthorOrAdmin
 from recipes.serializers import (IngredientsSerializer,
                                  RecipesCreateUpdateSerializer,
                                  RecipesForFavoriteAndShoppingSerializer,
@@ -29,7 +29,7 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
-    """Класс для работы с тегами рецептов."""
+    """Класс для работы с ингредиентами рецептов."""
 
     queryset = Ingredients.objects.all()
     serializer_class = IngredientsSerializer
@@ -53,7 +53,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'POST':
             return [permissions.IsAuthenticated()]
         elif self.request.method in ['PATCH', 'DELETE']:
-            return [IsAuthor()]
+            return [IsAuthorOrAdmin()]
         return super().get_permissions()
 
     def create(self, request, *args, **kwargs):
@@ -111,6 +111,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             request.user.favorite_recipes.add(recipe)
+            recipe.favorited_count += 1
             recipe.save()
             return Response(RecipesForFavoriteAndShoppingSerializer(
                 recipe).data, status=status.HTTP_201_CREATED)
@@ -121,6 +122,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             request.user.favorite_recipes.remove(recipe)
+            recipe.favorited_count -= 1
+            if recipe.favorited_count < 0:
+                recipe.favorited_count = 0
             recipe.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 

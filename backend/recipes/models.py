@@ -73,6 +73,10 @@ class Recipes(models.Model):
         verbose_name='Время приготовления',
     )
     is_favorited = models.BooleanField(default=False)
+    favorited_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Количество добавлений в избранное'
+    )
     is_in_shopping_cart = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
