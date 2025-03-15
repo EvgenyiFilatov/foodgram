@@ -221,4 +221,5 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    return HttpResponseRedirect(f'/recipes/{recipe.id}/')
+    full_link = request.build_absolute_uri(f'/recipes/{recipe.id}/')
+    return HttpResponseRedirect(full_link)
