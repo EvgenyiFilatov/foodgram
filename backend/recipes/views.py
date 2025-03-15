@@ -111,7 +111,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             request.user.favorite_recipes.add(recipe)
-            recipe.favorited_count += 1
             recipe.save()
             return Response(RecipesForFavoriteAndShoppingSerializer(
                 recipe).data, status=status.HTTP_201_CREATED)
@@ -122,9 +121,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             request.user.favorite_recipes.remove(recipe)
-            recipe.favorited_count -= 1
-            if recipe.favorited_count < 0:
-                recipe.favorited_count = 0
             recipe.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 

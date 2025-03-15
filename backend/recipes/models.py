@@ -79,10 +79,6 @@ class Recipes(models.Model):
         verbose_name='Дата публикации'
     )
     short_link = models.CharField(max_length=10, unique=True, blank=True)
-    favorited_count = models.PositiveIntegerField(
-        default=0,
-        verbose_name='Количество добавлений в избранное'
-    )
 
     class Meta:
         verbose_name = 'Рецепт'

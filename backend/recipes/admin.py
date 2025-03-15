@@ -26,8 +26,7 @@ class Recipes(admin.ModelAdmin):
         'author',
         'cooking_time',
         'is_favorited',
-        'is_in_shopping_cart',
-        'favorited_count',
+        'is_in_shopping_cart'
     )
     exclude = ('ingredients',)
     search_fields = ('name', 'author',)
