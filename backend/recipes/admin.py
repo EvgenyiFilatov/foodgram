@@ -26,8 +26,13 @@ class Recipes(admin.ModelAdmin):
         'author',
         'cooking_time',
         'is_favorited',
-        'is_in_shopping_cart'
+        'is_in_shopping_cart',
+        'favorited_count'
     )
     exclude = ('ingredients',)
     search_fields = ('name', 'author',)
     list_filter = ('tags',)
+
+    @admin.display(description='Количество добавлений в избранное')
+    def favorited_count(self, obj):
+        return obj.favorited_by.count()

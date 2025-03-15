@@ -88,6 +88,10 @@ class Recipes(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def favorited_count(self):
+        return self.favorited_by.count()
+
 
 class RecipeIngredients(models.Model):
     recipe = models.ForeignKey(
