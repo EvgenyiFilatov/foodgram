@@ -4,8 +4,8 @@ from collections import defaultdict
 from io import BytesIO, TextIOWrapper
 
 from api.paginators import CustomPageLimitPagination
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 from django_filters import rest_framework as filters
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import Ingredients, Recipes, Tags
@@ -221,5 +221,5 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    full_link = request.build_absolute_uri(f'/recipes/{recipe.id}/')
-    return HttpResponseRedirect(full_link)
+    # full_link = request.build_absolute_uri(f'/recipes/{recipe.id}/')
+    return redirect(f'/recipes/{recipe.id}/')
