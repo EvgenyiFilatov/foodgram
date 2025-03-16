@@ -1,4 +1,5 @@
-from myprofile.serializers import Base64ImageField, UserSerializer
+from api.serializers import Base64ImageField
+from myprofile.serializers import UserSerializer
 from recipes.constants import MIN_COOKING_TIME, MIN_INGREDIENTS_AMOUNT
 from recipes.models import Ingredients, RecipeIngredients, Recipes, Tags
 from rest_framework import serializers

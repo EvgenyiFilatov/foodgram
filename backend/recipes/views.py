@@ -54,7 +54,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             return [permissions.IsAuthenticated()]
         elif self.request.method in ['PATCH', 'DELETE']:
             if self.request.user.is_staff:
-                return [permissions.IsAuthenticated()]
+                return True
             return [IsAuthor()]
         return super().get_permissions()
 
@@ -183,6 +183,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         permission_classes=(permissions.IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
+        """Для скачивания списка покупок."""
         user = request.user
         recipes = user.shopping_cart_recipes.all()
         ingredients = defaultdict(
@@ -223,5 +224,4 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    # full_link = request.build_absolute_uri(f'/recipes/{recipe.id}/')
     return redirect(f'/recipes/{recipe.id}/')

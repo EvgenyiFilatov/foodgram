@@ -56,7 +56,7 @@ class MyProfileManager(BaseUserManager):
 
 
 class MyProfile(AbstractBaseUser, PermissionsMixin):
-    """Кастомная модель юзера, позволяет выбрать роль каждого пользователя."""
+    """Кастомная модель юзера."""
     first_name = models.CharField(
         max_length=150,
         verbose_name="Имя",
