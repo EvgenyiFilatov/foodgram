@@ -3,7 +3,6 @@ import re
 from api.serializers import Base64ImageField
 from myprofile.models import MyProfile, Subscription
 from recipes.models import Recipes
-from recipes.serializers import RecipesForFavoriteAndShoppingSerializer
 from rest_framework import serializers
 
 
@@ -78,6 +77,20 @@ class ChangePasswordSerializer(serializers.Serializer):
         return data
 
 
+class RecipesSerializerForSubcribes(serializers.ModelSerializer):
+    """Сериализатор отображения рецептов у подписчиков."""
+    image = Base64ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = Recipes
+        fields = [
+            'id',
+            'image',
+            'name',
+            'cooking_time'
+        ]
+
+
 class UserSerializerWithRecipes(UserSerializer):
     avatar = Base64ImageField(read_only=True)
     recipes = serializers.SerializerMethodField()
@@ -107,9 +120,7 @@ class UserSerializerWithRecipes(UserSerializer):
         queryset = Recipes.objects.filter(author=obj.id)
         if limit and limit.isdigit():
             queryset = queryset[:int(limit)]
-        return RecipesForFavoriteAndShoppingSerializer(
-            queryset, many=True
-        ).data
+        return RecipesSerializerForSubcribes(queryset, many=True).data
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
