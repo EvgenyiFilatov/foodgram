@@ -13,6 +13,7 @@ DEBUG = os.environ.get('DEBUG') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 
+CSRF_TRUSTED_ORIGINS = ['https://*.foodgramm.bounceme.net']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
