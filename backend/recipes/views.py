@@ -51,8 +51,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
         if self.request.method == 'POST':
             return [permissions.IsAuthenticated()]
         elif self.request.method in ['PATCH', 'DELETE']:
-            if self.request.user.is_staff:
-                return True
             return [IsAuthorOrAdminOrReadOnly()]
         return super().get_permissions()
 
