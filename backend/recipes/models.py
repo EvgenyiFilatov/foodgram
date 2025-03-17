@@ -1,4 +1,5 @@
-import hashlib
+import random
+import string
 
 from django.db import models
 from myprofile.models import MyProfile
@@ -98,7 +99,9 @@ class Recipes(models.Model):
     def generate_short_link(self):
         """Генерация уникальной короткой ссылки."""
         while True:
-            recipe_hash = hashlib.md5(f"{self.id}".encode()).hexdigest()[:6]
+            recipe_hash = ''.join(
+                random.choices(string.ascii_letters + string.digits, k=6)
+            )
             if not Recipes.objects.filter(short_link=recipe_hash).exists():
                 return recipe_hash
 
