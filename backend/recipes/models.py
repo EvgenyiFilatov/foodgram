@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from myprofile.models import MyProfile
 from recipes.constants import (MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
@@ -83,6 +85,7 @@ class Recipes(models.Model):
     )
     short_link = models.CharField(
         max_length=MAX_LENGTH_SHORT_LINK,
+        unique=True,
         blank=True,
         null=True
     )
@@ -91,6 +94,18 @@ class Recipes(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
         ordering = ('-created_at',)
+
+    def generate_short_link(self):
+        """Генерация уникальной короткой ссылки."""
+        while True:
+            recipe_hash = hashlib.md5(f"{self.id}".encode()).hexdigest()[:6]
+            if not Recipes.objects.filter(short_link=recipe_hash).exists():
+                return recipe_hash
+
+    def save(self, *args, **kwargs):
+        if not self.short_link:
+            self.short_link = self.generate_short_link()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
