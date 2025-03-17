@@ -47,50 +47,33 @@ class RecipesViewSet(viewsets.ModelViewSet):
     serializer_class = RecipesSerializer
     pagination_class = CustomPageLimitPagination
 
-    # def get_permissions(self):
-    #     if self.request.method == 'GET':
-    #         return [permissions.AllowAny()]
-    #     elif self.request.method == 'POST':
-    #         return [permissions.IsAuthenticated()]
-    #     elif self.request.method in ['PATCH', 'DELETE']:
-    #         if self.request.user.is_staff:
-    #             return True
-    #         return [IsAuthorOrAdminOrReadOnly()]
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAuthenticated()]
+        elif self.request.method in ['PATCH', 'DELETE']:
+            if self.request.user.is_staff:
+                return True
+            return [IsAuthorOrAdminOrReadOnly()]
+        return super().get_permissions()
 
-    @action(
-        detail=False,
-        methods=('post',),
-        permission_classes=(permissions.IsAuthenticated,)
-    )
     def create(self, request, *args, **kwargs):
         serializer = RecipesCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         recipe = serializer.save(author=request.user)
         return Response(RecipesSerializer(recipe).data, status=201)
 
-    @action(
-        detail=True,
-        methods=('patch',),
-        permission_classes=(IsAuthorOrAdminOrReadOnly,)
-    )
     def update(self, request, pk=None, partial=False):
         recipe = get_object_or_404(Recipes, id=pk)
-        # self.check_object_permissions(request, recipe)
+        self.check_object_permissions(request, recipe)
         serializer = RecipesCreateUpdateSerializer(
             recipe, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         recipe = serializer.save()
         return Response(RecipesSerializer(recipe).data)
 
-    @action(
-        detail=True,
-        methods=('delete',),
-        permission_classes=(IsAuthorOrAdminOrReadOnly,)
-    )
     def destroy(self, request, pk=None):
         recipe = get_object_or_404(Recipes, id=pk)
-        # self.check_object_permissions(request, recipe)
+        self.check_object_permissions(request, recipe)
         recipe.delete()
         return Response(
             {'detail': 'Рецепт удален.'},
