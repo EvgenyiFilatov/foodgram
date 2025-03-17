@@ -82,7 +82,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         """Получить короткую ссылку на рецепт."""
         recipe = get_object_or_404(Recipes, id=pk)
         # if not recipe.short_link:
-        #     recipe_hash = hashlib.md5(f"{recipe.id}".encode()).hexdigest()[:6]
+        #    recipe_hash = hashlib.md5(f"{recipe.id}".encode()).hexdigest()[:6]
         #     recipe.short_link = recipe_hash
         #     recipe.save()
         short_link = request.build_absolute_uri(f"/s/{recipe.short_link}")
