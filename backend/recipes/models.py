@@ -1,5 +1,8 @@
 from django.db import models
 from myprofile.models import MyProfile
+from recipes.constants import (MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
+                               MAX_LENGTH_NAME_RESIPES, MAX_LENGTH_NAME_TAGS,
+                               MAX_LENGTH_SHORT_LINK, MAX_LENGTH_SLUG_TAGS)
 
 
 class Tags(models.Model):
@@ -7,12 +10,12 @@ class Tags(models.Model):
 
     name = models.CharField(
         unique=True,
-        max_length=32,
+        max_length=MAX_LENGTH_NAME_TAGS,
         verbose_name='Название',
     )
     slug = models.SlugField(
         unique=True,
-        max_length=32,
+        max_length=MAX_LENGTH_SLUG_TAGS,
         verbose_name='Уникальный идентификатор',
     )
 
@@ -28,11 +31,11 @@ class Ingredients(models.Model):
     """Ингредиенты для приготовления рецепта."""
 
     name = models.CharField(
-        max_length=128,
+        max_length=MAX_LENGTH_NAME_INGR,
         verbose_name='Название',
     )
     measurement_unit = models.CharField(
-        max_length=64,
+        max_length=MAX_LENGTH_MEAS_UNIT,
         verbose_name='Единица измерения',
     )
 
@@ -52,7 +55,7 @@ class Recipes(models.Model):
         verbose_name='Автор', related_name='recipes',
     )
     name = models.CharField(
-        max_length=256,
+        max_length=MAX_LENGTH_NAME_RESIPES,
         verbose_name='Название рецепта',
     )
     image = models.ImageField(
@@ -78,7 +81,11 @@ class Recipes(models.Model):
         auto_now_add=True,
         verbose_name='Дата публикации'
     )
-    short_link = models.CharField(max_length=10, unique=True, blank=True)
+    short_link = models.CharField(
+        max_length=MAX_LENGTH_SHORT_LINK,
+        unique=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Рецепт'

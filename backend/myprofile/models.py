@@ -1,6 +1,8 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
+from myprofile.constants import (MAX_LENGTH_EMAIL, MAX_LENGTH_FIRST_NAME,
+                                 MAX_LENGTH_LAST_NAME, MAX_LENGTH_USERNAME)
 
 
 class MyProfileManager(BaseUserManager):
@@ -58,23 +60,23 @@ class MyProfileManager(BaseUserManager):
 class MyProfile(AbstractBaseUser, PermissionsMixin):
     """Кастомная модель юзера."""
     first_name = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH_FIRST_NAME,
         verbose_name="Имя",
         blank=False
     )
     last_name = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH_LAST_NAME,
         verbose_name="Фамилия",
         blank=False
     )
     username = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH_USERNAME,
         unique=True,
         verbose_name="Имя пользователя",
         blank=False
     )
     email = models.EmailField(
-        max_length=254,
+        max_length=MAX_LENGTH_EMAIL,
         unique=True,
         verbose_name="Адрес электронной почты",
         blank=False
