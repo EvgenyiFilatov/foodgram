@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if 'avatar' not in validated_data:
-            raise serializers.ValidationError("Аватар не должен быть пустым.")
+            raise serializers.ValidationError("Аватар не должен быть пустым")
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
         return instance
