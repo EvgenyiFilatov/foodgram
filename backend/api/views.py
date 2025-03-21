@@ -1,5 +1,5 @@
 from django.db.models import Sum
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django_filters import rest_framework as filters
 from myprofile.models import MyProfile, Subscription
