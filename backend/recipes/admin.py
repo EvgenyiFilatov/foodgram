@@ -33,7 +33,7 @@ class RecipesAdmin(admin.ModelAdmin):
         'display_image',
         'products_list'
     )
-    # exclude = ('ingredients',)
+    exclude = ('ingredients',)
     search_fields = ('name', 'author__username',)
     list_filter = ('tags', 'author__username')
 
