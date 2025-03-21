@@ -61,4 +61,4 @@ class RecipesAdmin(admin.ModelAdmin):
     def products_list(self, obj):
         return ', '.join(
             [ingredient.name for ingredient in obj.ingredients.all()]
-        ) if obj.ingredients.exists() else 'Нет продуктов'
+        )
