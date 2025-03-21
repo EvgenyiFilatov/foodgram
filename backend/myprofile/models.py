@@ -2,7 +2,6 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
 from django.utils import timezone
-
 from myprofile.constants import (MAX_LENGTH_EMAIL, MAX_LENGTH_FIRST_NAME,
                                  MAX_LENGTH_LAST_NAME, MAX_LENGTH_USERNAME)
 

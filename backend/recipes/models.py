@@ -3,7 +3,6 @@ import string
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
 from myprofile.models import MyProfile
 from recipes.constants import (MAX_AMOUNT, MAX_COOKING_TIME,
                                MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
