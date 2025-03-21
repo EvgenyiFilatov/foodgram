@@ -4,7 +4,7 @@ from myprofile.models import MyProfile, Subscription
 from rest_framework import serializers
 
 from api.fields import Base64ImageField
-from recipes.constants import MIN_COOKING_TIME, MIN_INGREDIENTS_AMOUNT
+from recipes.constants import MIN_INGREDIENTS_AMOUNT
 from recipes.models import Ingredients, RecipeIngredients, Recipes, Tags
 
 
@@ -203,13 +203,6 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
             'text',
             'cooking_time'
         )
-
-    # def validate_cooking_time(self, value):
-    #     """Проверка, что время готовки не менее требуемого."""
-    #     if value < MIN_COOKING_TIME:
-    #         raise serializers.ValidationError(
-    #             f"Время готовки должно быть не менее {MIN_COOKING_TIME}.")
-    #     return value
 
     def validate_tags(self, tags):
         """Проверка на наличие пустых и повторяющихся полей."""
