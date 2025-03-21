@@ -91,10 +91,9 @@ sudo apt install docker-compose-plugin
 sudo docker compose -f docker-compose.production.yml up -d
 ```
 
-Переход в контейнер backend, применение миграций, сбор статики и копирование статики, импорт справочника ингридиентов:
+Применение миграций, сбор статики и копирование статики, импорт справочника ингридиентов:
 
 ```
-sudo docker exec -it  id контейнера bash
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
 sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
