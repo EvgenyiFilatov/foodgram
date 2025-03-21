@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+
 from myprofile.models import MyProfile
 from recipes.models import Ingredients, Recipes, Tags
 
@@ -27,7 +28,7 @@ class RecipesFilter(filters.FilterSet):
 
     class Meta:
         model = Recipes
-        fields = ['is_favorited', 'author', 'is_in_shopping_cart', 'tags']
+        fields = ('is_favorited', 'author', 'is_in_shopping_cart', 'tags')
 
     def filter_is_favorited(self, queryset, name, value):
         if value is None:

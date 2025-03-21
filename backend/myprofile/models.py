@@ -1,6 +1,8 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
+from django.utils import timezone
+
 from myprofile.constants import (MAX_LENGTH_EMAIL, MAX_LENGTH_FIRST_NAME,
                                  MAX_LENGTH_LAST_NAME, MAX_LENGTH_USERNAME)
 
@@ -61,30 +63,30 @@ class MyProfile(AbstractBaseUser, PermissionsMixin):
     """Кастомная модель юзера."""
     first_name = models.CharField(
         max_length=MAX_LENGTH_FIRST_NAME,
-        verbose_name="Имя",
+        verbose_name='Имя',
         blank=False
     )
     last_name = models.CharField(
         max_length=MAX_LENGTH_LAST_NAME,
-        verbose_name="Фамилия",
+        verbose_name='Фамилия',
         blank=False
     )
     username = models.CharField(
         max_length=MAX_LENGTH_USERNAME,
         unique=True,
-        verbose_name="Имя пользователя",
+        verbose_name='Имя пользователя',
         blank=False
     )
     email = models.EmailField(
         max_length=MAX_LENGTH_EMAIL,
         unique=True,
-        verbose_name="Адрес электронной почты",
+        verbose_name='Адрес электронной почты',
         blank=False
     )
     avatar = models.ImageField(
         upload_to='backend/avatar/',
         null=True,
-        default=None
+        default=''
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -99,6 +101,7 @@ class MyProfile(AbstractBaseUser, PermissionsMixin):
         related_name='in_shopping_cart',
         blank=True
     )
+    date_joined = models.DateTimeField(default=timezone.now)
 
     objects = MyProfileManager()
 
@@ -111,6 +114,14 @@ class MyProfile(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    @property
+    def subscriptions_count(self):
+        return self.subscribers.count()
+
+    @property
+    def recipes_count(self):
+        return self.recipes.count()
 
 
 class Subscription(models.Model):
@@ -128,7 +139,7 @@ class Subscription(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['subscriber', 'subscribe_to'],
+                fields=('subscriber', 'subscribe_to'),
                 name='unique_subscription'
             )
         ]

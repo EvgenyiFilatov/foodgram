@@ -1,11 +1,15 @@
 import random
 import string
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from myprofile.models import MyProfile
-from recipes.constants import (MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
+from recipes.constants import (MAX_AMOUNT, MAX_COOKING_TIME,
+                               MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
                                MAX_LENGTH_NAME_RESIPES, MAX_LENGTH_NAME_TAGS,
-                               MAX_LENGTH_SHORT_LINK, MAX_LENGTH_SLUG_TAGS)
+                               MAX_LENGTH_SHORT_LINK, MAX_LENGTH_SLUG_TAGS,
+                               MIN_AMOUNT, MIN_COOKING_TIME)
 
 
 class Tags(models.Model):
@@ -45,9 +49,10 @@ class Ingredients(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        unique_together = ('name', 'measurement_unit')
 
     def __str__(self):
-        return self.name
+        return f'{self.name} ({self.measurement_unit})'
 
 
 class Recipes(models.Model):
@@ -75,11 +80,13 @@ class Recipes(models.Model):
         related_name='recipes',
         verbose_name='Ингредиенты',
     )
-    cooking_time = models.PositiveIntegerField(
-        verbose_name='Время приготовления',
+    cooking_time = models.PositiveSmallIntegerField(
+        verbose_name='Время приготовления, мин',
+        validators=[
+            MinValueValidator(MIN_COOKING_TIME),
+            MaxValueValidator(MAX_COOKING_TIME)
+        ]
     )
-    is_favorited = models.BooleanField(default=False)
-    is_in_shopping_cart = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Дата публикации'
@@ -120,11 +127,25 @@ class Recipes(models.Model):
 
 class RecipeIngredients(models.Model):
     recipe = models.ForeignKey(
-        Recipes, on_delete=models.CASCADE, related_name='ingredient'
+        Recipes,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+        related_name='recipe_ingredients'
     )
-    ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField()
+    ingredient = models.ForeignKey(
+        Ingredients,
+        on_delete=models.CASCADE,
+        verbose_name='Ингредиент',
+        related_name='recipe_ingredients'
+    )
+    amount = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(MIN_AMOUNT),
+            MaxValueValidator(MAX_AMOUNT)
+        ]
+    )
 
     class Meta:
         verbose_name = 'Ингредиент рецепта'
         verbose_name_plural = 'Ингредиенты рецептов'
+        unique_together = ('ingredient', 'recipe')
