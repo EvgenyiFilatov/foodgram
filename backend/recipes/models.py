@@ -4,11 +4,19 @@ import string
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from myprofile.models import MyProfile
-from recipes.constants import (MAX_AMOUNT, MAX_COOKING_TIME,
-                               MAX_LENGTH_MEAS_UNIT, MAX_LENGTH_NAME_INGR,
-                               MAX_LENGTH_NAME_RESIPES, MAX_LENGTH_NAME_TAGS,
-                               MAX_LENGTH_SHORT_LINK, MAX_LENGTH_SLUG_TAGS,
-                               MIN_AMOUNT, MIN_COOKING_TIME)
+
+from recipes.constants import (
+    MAX_AMOUNT,
+    MAX_COOKING_TIME,
+    MAX_LENGTH_MEAS_UNIT,
+    MAX_LENGTH_NAME_INGR,
+    MAX_LENGTH_NAME_RESIPES,
+    MAX_LENGTH_NAME_TAGS,
+    MAX_LENGTH_SHORT_LINK,
+    MAX_LENGTH_SLUG_TAGS,
+    MIN_AMOUNT,
+    MIN_COOKING_TIME,
+)
 
 
 class Tags(models.Model):

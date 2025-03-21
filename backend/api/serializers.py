@@ -1,11 +1,11 @@
 import re
 
 from myprofile.models import MyProfile, Subscription
-from recipes.constants import MIN_COOKING_TIME, MIN_INGREDIENTS_AMOUNT
-from recipes.models import Ingredients, RecipeIngredients, Recipes, Tags
 from rest_framework import serializers
 
 from api.fields import Base64ImageField
+from recipes.constants import MIN_COOKING_TIME, MIN_INGREDIENTS_AMOUNT
+from recipes.models import Ingredients, RecipeIngredients, Recipes, Tags
 
 
 class UserSerializer(serializers.ModelSerializer):

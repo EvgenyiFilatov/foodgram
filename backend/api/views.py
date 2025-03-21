@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django_filters import rest_framework as filters
 from myprofile.models import MyProfile, Subscription
-from recipes.models import Ingredients, Recipes, Tags
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -13,12 +12,19 @@ from rest_framework.response import Response
 from api.filters import IngredientsFilter, RecipesFilter
 from api.paginators import CustomPageLimitPagination
 from api.permissions import IsAuthorOrAdminOrReadOnly
-from api.serializers import (ChangePasswordSerializer, IngredientsSerializer,
-                             RecipesCreateUpdateSerializer, RecipesSerializer,
-                             ShortRecipesSerializer, SubscriptionSerializer,
-                             TagsSerializer, UserCreateSerializer,
-                             UserSerializer)
+from api.serializers import (
+    ChangePasswordSerializer,
+    IngredientsSerializer,
+    RecipesCreateUpdateSerializer,
+    RecipesSerializer,
+    ShortRecipesSerializer,
+    SubscriptionSerializer,
+    TagsSerializer,
+    UserCreateSerializer,
+    UserSerializer,
+)
 from api.utils import generate_shopping_list
+from recipes.models import Ingredients, Recipes, Tags
 
 
 class UserViewSet(viewsets.ModelViewSet):
