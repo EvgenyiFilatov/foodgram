@@ -33,7 +33,7 @@ class RecipesAdmin(admin.ModelAdmin):
         'display_image',
         'products_list'
     )
-    exclude = ('ingredients',)
+    # exclude = ('ingredients',)
     search_fields = ('name', 'author__username',)
     list_filter = ('tags', 'author__username')
 
@@ -51,14 +51,14 @@ class RecipesAdmin(admin.ModelAdmin):
         if obj.image:
             return (
                 f'<img src="{obj.image.url}"'
-                'style="max-width: 150px; height: auto;" />'
+                'style="max-width: 100px; height: auto;" />'
             )
         return 'Нет изображения'
     display_image.allow_tags = True
 
+    @mark_safe
     @admin.display(description='Продукты')
     def products_list(self, obj):
-        return ", ".join(
-            [f"{ingredient.ingredient} {ingredient.amount}"
-             for ingredient in obj.ingredient.all()]
-        )
+        return ', '.join(
+            [ingredient.name for ingredient in obj.ingredients.all()]
+        ) if obj.ingredients.exists() else 'Нет продуктов'
