@@ -205,8 +205,6 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
         )
 
     def validate_tags(self, tags):
-        """Проверка на наличие пустых и повторяющихся полей."""
-        # tags = attrs.get('tags')
         if not tags:
             raise serializers.ValidationError(
                 "Поле 'tags' не может быть пустым.")
@@ -215,8 +213,6 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
         return tags
 
     def validate_ingredients(self, ingredients):
-
-        # ingredients = attrs.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError(
                 "Должен быть хотя бы один ингредиент.")
