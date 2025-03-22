@@ -1,5 +1,6 @@
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django_filters import rest_framework as filters
 from myprofile.models import MyProfile, Subscription
 from rest_framework import permissions, status, viewsets
@@ -293,6 +294,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    # recipe_url = reverse('recipes', kwargs={'pk': recipe.id})
-    # return redirect(recipe_url)
-    return redirect(f'/recipes/{recipe.id}')
+    reverse_url = reverse('recipes', args=[recipe.id])
+    return redirect(reverse_url)
+    # return redirect(f'/recipes/{recipe.id}')
