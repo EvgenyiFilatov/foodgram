@@ -56,9 +56,9 @@ class RecipesAdmin(admin.ModelAdmin):
         return 'Нет изображения'
     display_image.allow_tags = True
 
-    @mark_safe
     @admin.display(description='Продукты')
     def products_list(self, obj):
         return ', '.join(
-            [ingredient.name for ingredient in obj.ingredients.all()]
+            [ingredient.ingredient.name
+             for ingredient in obj.recipe_ingredients.all()]
         )
