@@ -210,7 +210,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     def get_short_link(self, request, pk=None):
         """Получить короткую ссылку на рецепт."""
         recipe = get_object_or_404(Recipes, id=pk)
-        short_link = request.build_absolute_uri(f"/s/{recipe.short_link}")
+        short_link = request.build_absolute_uri(f'/s/{recipe.short_link}')
         return Response({'short-link': short_link})
 
     def _add_del_favorite_and_cart(
@@ -293,6 +293,4 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    # url_redirect = reverse('recipes', args=(recipe.id,))
-    # return redirect(url_redirect)
-    return redirect(f'/recipes/{recipe.id}')
+    return redirect(request.build_absolute_uri(f'/recipes/{recipe.id}'))
