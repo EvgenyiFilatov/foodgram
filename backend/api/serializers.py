@@ -1,9 +1,9 @@
 import re
 
-from myprofile.models import MyProfile, Subscription
 from rest_framework import serializers
 
 from api.fields import Base64ImageField
+from myprofile.models import MyProfile, Subscription
 from recipes.constants import MIN_INGREDIENTS_AMOUNT
 from recipes.models import Ingredients, RecipeIngredients, Recipes, Tags
 
@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if 'avatar' not in validated_data:
-            raise serializers.ValidationError("Аватар не должен быть пустым")
+            raise serializers.ValidationError('Аватар не должен быть пустым')
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
         return instance
@@ -57,7 +57,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         pattern = r'^[\w.@+-]+\Z'
         if not re.match(pattern, value):
-            raise serializers.ValidationError("Некорректное имя пользователя.")
+            raise serializers.ValidationError('Некорректное имя пользователя.')
         return value
 
     def create(self, validated_data):
@@ -74,7 +74,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         current_password = data['current_password']
         if not user.check_password(current_password):
             raise serializers.ValidationError(
-                {"current_password": "Неверный текущий пароль."}
+                {'current_password': 'Неверный текущий пароль.'}
             )
         return data
 
@@ -170,6 +170,14 @@ class RecipeIngredientSerializerForCreate(serializers.ModelSerializer):
         model = RecipeIngredients
         fields = ('id', 'amount')
 
+    def validate_amount(self, amount):
+        if amount < MIN_INGREDIENTS_AMOUNT:
+            raise serializers.ValidationError(
+                'Количество ингредиента не может быть меньше '
+                f'{MIN_INGREDIENTS_AMOUNT}.'
+            )
+        return amount
+
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     """Для отображения ингридиентов в рецепте."""
@@ -207,27 +215,19 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
     def validate_tags(self, tags):
         if not tags:
             raise serializers.ValidationError(
-                "Поле 'tags' не может быть пустым.")
+                'Поле "tags" не может быть пустым.')
         if len(tags) != len(set(tags)):
-            raise serializers.ValidationError("Теги не должны повторяться.")
+            raise serializers.ValidationError('Теги не должны повторяться.')
         return tags
 
     def validate_ingredients(self, ingredients):
         if not ingredients:
             raise serializers.ValidationError(
-                "Должен быть хотя бы один ингредиент.")
+                'Должен быть хотя бы один ингредиент.')
         ingredient_ids = [item['id'] for item in ingredients]
-        ingredient_amount = [item['amount'] for item in ingredients]
-        for item in ingredient_amount:
-            if item < MIN_INGREDIENTS_AMOUNT:
-                raise serializers.ValidationError(
-                    "Количество ингредиента не может быть меньше "
-                    f"{MIN_INGREDIENTS_AMOUNT}."
-                )
-
         if len(ingredient_ids) != len(set(ingredient_ids)):
             raise serializers.ValidationError(
-                "Ингредиенты не должны повторяться.")
+                'Ингредиенты не должны повторяться.')
 
         return ingredients
 
@@ -252,18 +252,10 @@ class RecipesCreateUpdateSerializer(serializers.ModelSerializer):
             )
         ingredients_data = validated_data.pop('ingredients', None)
         tags_data = validated_data.pop('tags', None)
-
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
-        if tags_data is not None:
-            instance.tags.set(tags_data)
-
+        instance = super().update(instance, validated_data)
         RecipeIngredients.objects.filter(recipe=instance).delete()
-        if ingredients_data is not None:
-            self._create_ingredients(instance, ingredients_data)
-
-        instance.save()
+        instance.tags.set(tags_data)
+        self._create_ingredients(instance, ingredients_data)
         return instance
 
     def _create_ingredients(self, recipe, ingredients_data):

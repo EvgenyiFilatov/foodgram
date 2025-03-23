@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
-from myprofile.models import MyProfile
 
+from myprofile.models import MyProfile
 from recipes.models import Ingredients, Recipes, Tags
 
 
@@ -14,7 +14,6 @@ class IngredientsFilter(filters.FilterSet):
 
 
 class RecipesFilter(filters.FilterSet):
-    author = filters.ModelChoiceFilter(queryset=MyProfile.objects.all())
     tags = filters.ModelMultipleChoiceFilter(
         queryset=Tags.objects.all(),
         field_name='tags__slug',

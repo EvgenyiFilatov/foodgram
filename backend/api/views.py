@@ -2,7 +2,6 @@ from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django_filters import rest_framework as filters
-from myprofile.models import MyProfile, Subscription
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -24,6 +23,7 @@ from api.serializers import (
     UserSerializer,
 )
 from api.utils import generate_shopping_list
+from myprofile.models import MyProfile, Subscription
 from recipes.models import Ingredients, Recipes, Tags
 
 
@@ -33,10 +33,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = UserCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
         detail=False,
@@ -62,7 +61,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 avatar_url = user.avatar.url if user.avatar else None
                 return Response(
-                    {"avatar": request.build_absolute_uri(avatar_url)},
+                    {'avatar': request.build_absolute_uri(avatar_url)},
                     status=status.HTTP_200_OK
                 )
             return Response(
@@ -93,7 +92,7 @@ class UserViewSet(viewsets.ModelViewSet):
             user.set_password(new_password)
             user.save()
             return Response(
-                {"detail": "Пароль успешно изменен."},
+                {'detail': 'Пароль успешно изменен.'},
                 status=status.HTTP_204_NO_CONTENT
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -146,7 +145,7 @@ class UserViewSet(viewsets.ModelViewSet):
                                        context={'request': request}
                                        ).data, status=status.HTTP_201_CREATED
             )
-        elif request.method == "DELETE":
+        elif request.method == 'DELETE':
             subscription = Subscription.objects.filter(
                 subscriber=user, subscribe_to=subscribe_to).first()
             if not subscription:
@@ -204,8 +203,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        recipe = serializer.save(author=self.request.user)
-        return recipe
+        serializer.save(author=self.request.user)
 
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_short_link(self, request, pk=None):
