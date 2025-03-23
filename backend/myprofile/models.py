@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils import timezone
+
 from myprofile.constants import (
     MAX_LENGTH_EMAIL,
     MAX_LENGTH_FIRST_NAME,
