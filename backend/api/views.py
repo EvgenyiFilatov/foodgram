@@ -295,8 +295,8 @@ def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
     reverse_url = reverse('api:recipes-detail', kwargs={'pk': recipe.id})
-    full_url = request.build_absolute_uri(reverse_url)
-    full_url = full_url.replace('/api/', '/')
+    # full_url = request.build_absolute_uri(reverse_url)
+    # full_url = full_url.replace('/api/', '/')
     # print(full_url)
-    return redirect(full_url)
-    return redirect(f'/recipes/{recipe.id}')
+    return redirect(reverse_url)
+    # return redirect(f'/recipes/{recipe.id}')
