@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from api.views import redirect_short_link
+from api.views import RecipesViewSet, redirect_short_link
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,6 +12,11 @@ urlpatterns = [
         's/<str:short_link>/',
         redirect_short_link,
         name='redirect_short_link'
+    ),
+    path(
+        'recipes/<int:pk>/',
+        RecipesViewSet.as_view({'get': 'retrieve'}),
+        name='recipes'
     ),
 ]
 
