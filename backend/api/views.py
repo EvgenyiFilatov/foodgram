@@ -292,6 +292,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
 def redirect_short_link(request, short_link):
     """Перенаправление по короткой ссылке на рецепт."""
     recipe = get_object_or_404(Recipes, short_link=short_link)
-    reverse_url = reverse('api:recipes-detail', kwargs={'pk': recipe.id})
-    full_url = reverse_url.replace('/api/', '/')
-    return redirect(full_url)
+    reverse_url = reverse('api:recipes', kwargs={'pk': recipe.id})
+    # full_url = reverse_url.replace('/api/', '/')
+    return redirect(reverse_url)
